@@ -21,7 +21,7 @@ app.use(cors({ origin: true, credentials: true }));
 app.use(express.json({ limit: '1mb' }));
 
 function getUserId(req) {
-  return req.body?.userId || req.query?.userId || req.get('x-user-id') || req.headers['x-user-id'] || '';
+  return req.body?.user_id || req.query?.user_id || req.get('x-user-id') || req.headers['x-user-id'] || '';
 }
 
 app.post('/api/review', upload.single('file'), async (req, res) => {

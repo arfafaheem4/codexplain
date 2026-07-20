@@ -73,7 +73,7 @@ export default function App() {
   async function loadPatterns() {
     if (!user?.id) return;
     try {
-      const response = await fetch(`${apiBaseUrl}/api/patterns?userId=${encodeURIComponent(user.id)}`, {
+      const response = await fetch(`${apiBaseUrl}/api/patterns?user_id=${encodeURIComponent(user.id)}`, {
         headers: { 'X-User-Id': user.id },
       });
       const data = await response.json();
@@ -112,7 +112,7 @@ export default function App() {
       const codeContext = code || (file ? await file.text() : '');
       const body = new FormData();
       body.append('code', codeContext);
-      body.append('userId', user.id);
+      body.append('user_id', user.id);
       if (file) body.append('file', file);
 
       const response = await fetch(`${apiBaseUrl}/api/review`, {
