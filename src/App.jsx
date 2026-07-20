@@ -3,6 +3,7 @@ import AuthPage from './AuthPage.jsx';
 import { supabase } from './supabase.js';
 
 const emptyResults = { explanation: '', correctedCode: '', quizQuestion: '', mistakeCategory: '' };
+const apiBaseUrl = import.meta.env.VITE_API_URL || '';
 
 function CodeBlock({ code }) {
   return <pre className="code-block"><code>{code}</code></pre>;
@@ -72,7 +73,7 @@ export default function App() {
   async function loadPatterns() {
     if (!user?.id) return;
     try {
-      const response = await fetch(`http://localhost:3001/api/patterns?userId=${encodeURIComponent(user.id)}`, {
+      const response = await fetch(`${apiBaseUrl}/api/patterns?userId=${encodeURIComponent(user.id)}`, {
         headers: { 'X-User-Id': user.id },
       });
       const data = await response.json();
@@ -114,7 +115,7 @@ export default function App() {
       body.append('userId', user.id);
       if (file) body.append('file', file);
 
-      const response = await fetch('http://localhost:3001/api/review', {
+      const response = await fetch(`${apiBaseUrl}/api/review`, {
         method: 'POST',
         body,
         headers: { 'X-User-Id': user.id },
@@ -144,7 +145,7 @@ export default function App() {
     setAnswerFeedback(null);
 
     try {
-      const response = await fetch('http://localhost:3001/api/check-answer', {
+      const response = await fetch(`${apiBaseUrl}/api/check-answer`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ answer, quizQuestion: results.quizQuestion, codeContext: reviewedCode, mistakeType: results.explanation }),
@@ -168,7 +169,7 @@ export default function App() {
     setVerifyFeedback(null);
 
     try {
-      const response = await fetch('http://localhost:3001/api/verify', {
+      const response = await fetch(`${apiBaseUrl}/api/verify`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ codeContext: reviewedCode, mistakeType: results.explanation }),
@@ -196,7 +197,7 @@ export default function App() {
     setVerifyFeedback(null);
 
     try {
-      const response = await fetch('http://localhost:3001/api/verify-check', {
+      const response = await fetch(`${apiBaseUrl}/api/verify-check`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ answer: verifyAnswer, modifiedCode: verifyChallenge.modifiedCode, mistakeType: results.explanation }),
